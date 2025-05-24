@@ -1,8 +1,10 @@
 import React from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { ChevronDownIcon } from '../atoms/icons';
+import { THEME_OPTIONS, ThemeOption } from '../../constants/theme';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme() as { theme: ThemeOption, setTheme: (theme: ThemeOption) => void };
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -23,8 +25,9 @@ export function ThemeToggle() {
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    e.preventDefault();
+
     if (!isOpen && (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
       setIsOpen(true);
       setActiveIndex(0);
       return;
@@ -33,31 +36,26 @@ export function ThemeToggle() {
     if (isOpen) {
       switch (e.key) {
         case 'ArrowDown':
-          e.preventDefault();
-          setActiveIndex(prev => (prev + 1) % options.length);
+          setActiveIndex(prev => (prev + 1) % THEME_OPTIONS.length);
           break;
         case 'ArrowUp':
-          e.preventDefault();
-          setActiveIndex(prev => (prev - 1 + options.length) % options.length);
+          setActiveIndex(prev => (prev - 1 + THEME_OPTIONS.length) % THEME_OPTIONS.length);
           break;
         case 'Enter':
         case ' ':
-          e.preventDefault();
           if (activeIndex >= 0) {
-            setTheme(options[activeIndex].value as 'light' | 'dark' | 'system');
+            setTheme(THEME_OPTIONS[activeIndex].value);
             setIsOpen(false);
             setActiveIndex(-1);
             buttonRef.current?.focus();
           }
           break;
         case 'Escape':
-          e.preventDefault();
           setIsOpen(false);
           setActiveIndex(-1);
           buttonRef.current?.focus();
           break;
         case 'Tab':
-          e.preventDefault();
           setIsOpen(false);
           setActiveIndex(-1);
           break;
@@ -71,30 +69,6 @@ export function ThemeToggle() {
       optionRefs.current[activeIndex]?.focus();
     }
   }, [isOpen, activeIndex]);
-
-  const options = [
-    {
-      value: 'light', label: 'Light', icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      )
-    },
-    {
-      value: 'dark', label: 'Dark', icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-      )
-    },
-    {
-      value: 'system', label: 'System', icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    }
-  ];
 
   return (
     <div className="relative inline-block" onKeyDown={handleKeyDown} ref={dropdownRef}>
@@ -113,11 +87,9 @@ export function ThemeToggle() {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        {options.find(opt => opt.value === theme)?.icon}
-        <span className="hidden sm:inline-block">{options.find(opt => opt.value === theme)?.label}</span>
-        <svg className="w-4 h-4 ml-1 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        {THEME_OPTIONS.find(opt => opt.value === theme)?.icon}
+        <span className="hidden sm:inline-block">{THEME_OPTIONS.find(opt => opt.value === theme)?.label}</span>
+        <ChevronDownIcon className="w-4 h-4 ml-1 text-gray-400 dark:text-gray-500" />
       </button>
 
       <div
@@ -126,14 +98,14 @@ export function ThemeToggle() {
         aria-orientation="vertical"
         aria-labelledby="theme-menu-button"
       >
-        {options.map((option, index) => (
+        {THEME_OPTIONS.map((option, index) => (
           <button
             key={option.value}
             ref={(el: HTMLButtonElement | null) => {
               if (el) optionRefs.current[index] = el;
             }}
             onClick={() => {
-              setTheme(option.value as 'light' | 'dark' | 'system');
+              setTheme(option.value);
               setIsOpen(false);
               buttonRef.current?.focus();
             }}
@@ -146,6 +118,7 @@ export function ThemeToggle() {
             {option.label}
           </button>
         ))}
+
       </div>
     </div>
   );

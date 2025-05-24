@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Diagnostic Screener Application
+
+This is a [Next.js](https://nextjs.org/) project for a diagnostic screener application, built with modern React practices and a focus on scalability and maintainability.
 
 ## Getting Started
 
@@ -8,17 +10,62 @@ First, run the development server:
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Atomic Design
+
+This project follows the Atomic Design methodology for organizing components:
+
+#### Atoms
+
+Basic building blocks of the UI that cannot be broken down further:
+
+- `/components/atoms` - Basic UI elements like buttons, inputs, and icons
+  - `Button.tsx` - Reusable button component with variants
+  - `Radio.tsx` - Radio input component
+  - `/icons` - SVG icon components
+
+#### Molecules
+
+Groups of atoms bonded together to form a functional unit:
+
+- `/components/molecules` - Components composed of multiple atoms
+  - `ThemeToggle.tsx` - Theme switcher component
+  - `QuestionForm.tsx` - Form for displaying and answering questions
+  - `QuestionNavigation.tsx` - Navigation controls for questions
+  - `AssessmentResults.tsx` - Displays assessment results
+
+#### Organisms
+
+Groups of molecules that form a relatively complex section of the UI:
+
+- `/components/organisms` - More complex components
+  - `Screener.tsx` - Main screener component that orchestrates the assessment
+
+### Constants
+
+Shared constants are extracted into dedicated files for better maintainability:
+
+- `/constants/theme.ts` - Theme-related constants (theme options, icons)
+- `/constants/button.ts` - Button style constants (variants, base styles)
+
+### Layouts
+
+Reusable layout components that wrap pages:
+
+- `/layouts/MainLayout.tsx` - Main application layout
+
+### Providers
+
+Context providers for global state management:
+
+- `/providers/ThemeProvider.tsx` - Manages theme state
+- `/providers/QueryProvider.tsx` - Sets up React Query
+- `/providers/AppProviders.tsx` - Composes all providers
 
 ## Learn More
 

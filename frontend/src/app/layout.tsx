@@ -1,7 +1,6 @@
-import { Inter } from 'next/font/google';
-import './globals.css';
 import { Outfit } from 'next/font/google';
-import { Providers } from '@/app/providers';
+import './globals.css';
+import { AppProviders } from '@/providers';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -11,10 +10,15 @@ const outfit = Outfit({
 
 export const metadata = {
   title: 'Clinical Assessment | Blueprint',
-  description: 'A comprehensive clinical assessment tool for mental health screening',
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#3B82F6',
+  description: 'A comprehensive clinical assessment tool for mental health screening'
 };
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export const themeColor = '#3B82F6';
 
 export default function RootLayout({
   children,
@@ -23,8 +27,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} font-sans antialiased bg-white dark:bg-gray-900 transition-colors`}>
-        <Providers>{children}</Providers>
+      <body className={`${outfit.variable} font-sans antialiased`}>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
