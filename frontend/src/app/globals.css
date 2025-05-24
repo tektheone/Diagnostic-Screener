@@ -8,15 +8,18 @@
   }
 
   /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
+
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
-  ::-webkit-scrollbar-track {
-    @apply bg-blue-50;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-blue-300 rounded-full hover:bg-blue-400 transition-colors;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 }
